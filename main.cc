@@ -47,11 +47,13 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, "rosbag_from_images");
 
-    if(argc!=5)
+    if(!(argc==5 || argc == 6))
     {
-        cerr << "Usage: rosrun rosbag_from_images rosbag_from_images <path to image directory> <image extension .ext> <frequency> <path to output bag>" << endl;
+        cerr << "Usage: rosrun rosbag_from_images rosbag_from_images <path to image directory> <image extension .ext> <frequency> <path to output bag> [topic]" << endl;
         return 0;
     }
+
+    const std::string topic = argc == 6 ? std::string(argv[5]) : "/camera/image_raw";
 
     ros::start();
 
@@ -82,7 +84,7 @@ int main(int argc, char **argv)
         cvImage.image = im;
         cvImage.encoding = sensor_msgs::image_encodings::BGR8;
         cvImage.header.stamp = t;
-        bag_out.write("/labled_image", t, cvImage.toImageMsg());
+        bag_out.write(topic, t, cvImage.toImageMsg());
 
         if (use_freq) {
           t += ros::Duration(1.0f/freq);
