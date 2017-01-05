@@ -2,11 +2,12 @@
   <name>rosbag_from_images</name>
   <version>0.0.1</version>
   <description>
-    rosbag_from_images
+ROS package to generate a rosbag from a collection of images. Images are ordered alphabetically. The timestamp for each image is assigned according to the specified frequency or is obtained from the filename. 
   </description>
   <license>BSD</license>
- <maintainer email="vincent.rabaud@gmail.com">Vincent Rabaud</maintainer> 
+  <maintainer email="wechtc@gmail.com">Christopher Wecht</maintainer>
   <author>Raul Mur-Artal</author>
+  <author>Christopher Wecht</author>
 
   <buildtool_depend>catkin</buildtool_depend>
 
