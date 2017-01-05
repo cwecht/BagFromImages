@@ -19,22 +19,26 @@
 namespace fs = ::boost::filesystem;
 
 // return the filenames of all files that have the specified extension
-// in the specified directory and all subdirectories
-std::vector<std::string> get_all(const std::string& path, const std::string& ext)
+// in the specified directory (not the subdirectories!).
+std::vector<fs::path> get_all(const fs::path& root, const std::string& ext)
 {
-    std::vector<std::string> filenames;
-    const fs::path root(path);
+    std::vector<fs::path> filenames;
     if(fs::exists(root) && fs::is_directory(root)) {
-
-       fs::directory_iterator it(root);
-       fs::directory_iterator endit;
-
-       while(it != endit) {
-          if(fs::is_regular_file(*it) && it->path().extension() == ext) filenames.push_back(it->path().string());
-          ++it;
+       for (fs::directory_iterator it(root), endit;  it != endit; ++it) {
+          if(fs::is_regular_file(*it) && it->path().extension() == ext) {
+            filenames.push_back(it->path());
+          }
        }
     }
     return filenames;
+}
+
+std::string fixFileExtension(const std::string& ext) {
+  if (*ext.begin() == '.') {
+    return ext;
+  } else {
+    return '.' + ext;
+  }
 }
 
 using namespace std;
@@ -52,7 +56,7 @@ int main(int argc, char **argv)
     ros::start();
 
     // Vector of paths to image
-    vector<string> filenames = get_all(std::string(argv[1]), std::string(argv[2]));
+    vector<fs::path> filenames = get_all(fs::path(std::string(argv[1])), fixFileExtension(std::string(argv[2])));
 
     cout << "Images: " << filenames.size() << endl;
 
@@ -72,7 +76,7 @@ int main(int argc, char **argv)
         if(!ros::ok())
             break;
 
-        cv::Mat im = cv::imread(filenames[i],CV_LOAD_IMAGE_COLOR);
+        const cv::Mat im = cv::imread(filenames[i].string(),CV_LOAD_IMAGE_COLOR);
         cv_bridge::CvImage cvImage;
         cvImage.image = im;
         cvImage.encoding = sensor_msgs::image_encodings::RGB8;
