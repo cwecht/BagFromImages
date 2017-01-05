@@ -61,28 +61,34 @@ int main(int argc, char **argv)
     cout << "Images: " << filenames.size() << endl;
 
     // Frequency
-    double freq = atof(argv[3]);
+    const double freq = atof(argv[3]);
+    const bool use_freq = freq > 0;
 
     // Output bag
     rosbag::Bag bag_out(argv[4],rosbag::bagmode::Write);
 
     ros::Time t = ros::Time::now();
 
-    const float T=1.0f/freq;
-    ros::Duration d(T);
-
-    for(size_t i=0;i<filenames.size();i++)
+    for(size_t i = 0; i < filenames.size(); i++)
     {
         if(!ros::ok())
             break;
 
         const cv::Mat im = cv::imread(filenames[i].string(),CV_LOAD_IMAGE_COLOR);
+
+        if (!use_freq) {
+          const std::string date_str = filenames[i].stem().string();
+          t = ros::Time::fromBoost(boost::posix_time::from_iso_string(date_str));
+        }
+
         cv_bridge::CvImage cvImage;
         cvImage.image = im;
-        cvImage.encoding = sensor_msgs::image_encodings::RGB8;
+        cvImage.encoding = sensor_msgs::image_encodings::BGR8;
         cvImage.header.stamp = t;
-        bag_out.write("/camera/image_raw",ros::Time(t),cvImage.toImageMsg());
-        t+=d;
+        bag_out.write("/labled_image",ros::Time(t),cvImage.toImageMsg());
+        if (use_freq) {
+          t += ros::Duration(1.0f/freq);
+        }
         cout << i << " / " << filenames.size() << endl;
     }
 
