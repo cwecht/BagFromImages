@@ -17,11 +17,11 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "BagFromImages");
+    ros::init(argc, argv, "rosbag_from_images");
 
     if(argc!=5)
     {
-        cerr << "Usage: rosrun BagFromImages BagFromImages <path to image directory> <image extension .ext> <frequency> <path to output bag>" << endl;
+        cerr << "Usage: rosrun rosbag_from_images rosbag_from_images <path to image directory> <image extension .ext> <frequency> <path to output bag>" << endl;
         return 0;
     }
 

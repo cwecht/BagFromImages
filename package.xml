@@ -1,0 +1,20 @@
+<package>
+  <name>rosbag_from_images</name>
+  <version>0.0.1</version>
+  <description>
+    rosbag_from_images
+  </description>
+  <license>BSD</license>
+ <maintainer email="vincent.rabaud@gmail.com">Vincent Rabaud</maintainer> 
+  <author>Raul Mur-Artal</author>
+
+  <build_depend>catkin</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>rosbag</build_depend>
+  <build_depend>cv_bridge</build_depend>
+  <build_depend>image_transport</build_depend>
+</package>
+
+
