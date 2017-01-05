@@ -8,6 +8,8 @@
  <maintainer email="vincent.rabaud@gmail.com">Vincent Rabaud</maintainer> 
   <author>Raul Mur-Artal</author>
 
+  <buildtool_depend>catkin</buildtool_depend>
+
   <build_depend>catkin</build_depend>
   <build_depend>roscpp</build_depend>
   <build_depend>sensor_msgs</build_depend>

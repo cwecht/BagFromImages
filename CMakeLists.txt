@@ -3,6 +3,7 @@ project(rosbag_from_images)
 
 find_package(catkin REQUIRED COMPONENTS cv_bridge image_transport roscpp rosbag)
 find_package(OpenCV REQUIRED)
+find_package(Boost REQUIRED COMPONENTS date_time filesystem)
 
 catkin_package()
 
