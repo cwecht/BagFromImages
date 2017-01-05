@@ -13,7 +13,6 @@ include_directories(
 
 add_executable(${PROJECT_NAME}
   main.cc
-  Thirdparty/DLib/FileFunctions.cpp
 )
 
 add_dependencies(${PROJECT_NAME}

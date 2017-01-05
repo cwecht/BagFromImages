@@ -10,8 +10,32 @@
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
 
-#include "Thirdparty/DLib/FileFunctions.h"
+#include <boost/date_time/posix_time/posix_time.hpp>
 
+#define BOOST_FILESYSTEM_VERSION 3
+#define BOOST_FILESYSTEM_NO_DEPRECATED
+#include <boost/filesystem.hpp>
+
+namespace fs = ::boost::filesystem;
+
+// return the filenames of all files that have the specified extension
+// in the specified directory and all subdirectories
+std::vector<std::string> get_all(const std::string& path, const std::string& ext)
+{
+    std::vector<std::string> filenames;
+    const fs::path root(path);
+    if(fs::exists(root) && fs::is_directory(root)) {
+
+       fs::directory_iterator it(root);
+       fs::directory_iterator endit;
+
+       while(it != endit) {
+          if(fs::is_regular_file(*it) && it->path().extension() == ext) filenames.push_back(it->path().string());
+          ++it;
+       }
+    }
+    return filenames;
+}
 
 using namespace std;
 
@@ -28,8 +52,7 @@ int main(int argc, char **argv)
     ros::start();
 
     // Vector of paths to image
-    vector<string> filenames =
-            DUtils::FileFunctions::Dir(argv[1], argv[2], true);
+    vector<string> filenames = get_all(std::string(argv[1]), std::string(argv[2]));
 
     cout << "Images: " << filenames.size() << endl;
 
