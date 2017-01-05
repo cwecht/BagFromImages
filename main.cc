@@ -56,7 +56,7 @@ int main(int argc, char **argv)
     ros::start();
 
     // Vector of paths to image
-    vector<fs::path> filenames = get_all(fs::path(std::string(argv[1])), fixFileExtension(std::string(argv[2])));
+    const vector<fs::path> filenames = get_all(fs::path(std::string(argv[1])), fixFileExtension(std::string(argv[2])));
 
     cout << "Images: " << filenames.size() << endl;
 
@@ -69,11 +69,8 @@ int main(int argc, char **argv)
 
     ros::Time t = ros::Time::now();
 
-    for(size_t i = 0; i < filenames.size(); i++)
+    for(size_t i = 0; i < filenames.size() && ros::ok(); i++)
     {
-        if(!ros::ok())
-            break;
-
         const cv::Mat im = cv::imread(filenames[i].string(),CV_LOAD_IMAGE_COLOR);
 
         if (!use_freq) {
@@ -85,7 +82,8 @@ int main(int argc, char **argv)
         cvImage.image = im;
         cvImage.encoding = sensor_msgs::image_encodings::BGR8;
         cvImage.header.stamp = t;
-        bag_out.write("/labled_image",ros::Time(t),cvImage.toImageMsg());
+        bag_out.write("/labled_image", t, cvImage.toImageMsg());
+
         if (use_freq) {
           t += ros::Duration(1.0f/freq);
         }
@@ -95,6 +93,5 @@ int main(int argc, char **argv)
     bag_out.close();
 
     ros::shutdown();
-
     return 0;
 }
