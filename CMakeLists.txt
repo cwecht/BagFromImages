@@ -12,7 +12,7 @@ include_directories(
 )
 
 add_executable(${PROJECT_NAME}
-  main.cc
+  src/main.cc
 )
 
 add_dependencies(${PROJECT_NAME}

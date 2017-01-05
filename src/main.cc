@@ -1,20 +1,17 @@
-#include<iostream>
-#include<ros/ros.h>
-#include<rosbag/bag.h>
-#include<rosbag/view.h>
-#include<sensor_msgs/Image.h>
-#include<std_msgs/Time.h>
-#include<std_msgs/Header.h>
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
+#include <iostream>
+
+#include <ros/ros.h>
+#include <rosbag/bag.h>
 #include <cv_bridge/cv_bridge.h>
+
+#include <sensor_msgs/Image.h>
 #include <sensor_msgs/image_encodings.h>
 
-#include <boost/date_time/posix_time/posix_time.hpp>
+#include <opencv2/core/core.hpp>
+#include <opencv2/imgcodecs.hpp>
 
-#define BOOST_FILESYSTEM_VERSION 3
-#define BOOST_FILESYSTEM_NO_DEPRECATED
 #include <boost/filesystem.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 
 namespace fs = ::boost::filesystem;
 
@@ -73,7 +70,7 @@ int main(int argc, char **argv)
 
     for(size_t i = 0; i < filenames.size() && ros::ok(); i++)
     {
-        const cv::Mat im = cv::imread(filenames[i].string(),CV_LOAD_IMAGE_COLOR);
+        const cv::Mat im = cv::imread(filenames[i].string());
 
         if (!use_freq) {
           const std::string date_str = filenames[i].stem().string();
